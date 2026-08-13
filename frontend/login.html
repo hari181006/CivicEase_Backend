@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Zoya Services</title><style>
+        :root {
+            --primary: #155eef;
+            --primary-dark: #1047b5;
+            --dark: #0f1f3d;
+            --green: #12b76a;
+            --red: #d92d20;
+            --orange: #f79009;
+            --background: #f5f7fb;
+            --card: #ffffff;
+            --text: #172033;
+            --muted: #667085;
+            --border: #e4e7ec;
+            --shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* AUTHENTICATION */
+
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #155eef, #0f1f3d);
+        }
+
+        .auth-card {
+            width: min(100%, 470px);
+            background: #ffffff;
+            border-radius: 22px;
+            padding: 30px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+        }
+
+        .auth-logo {
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            margin: auto;
+            border-radius: 17px;
+            background: linear-gradient(135deg, #3185ff, #13b6a4);
+            color: #ffffff;
+            font-size: 29px;
+        }
+
+        .auth-card h1 {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 27px;
+        }
+
+        .auth-subtitle {
+            color: var(--muted);
+            text-align: center;
+            font-size: 13px;
+            margin: 5px 0 25px;
+        }
+
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            background: #f2f4f7;
+            padding: 5px;
+            border-radius: 10px;
+            margin-bottom: 22px;
+        }
+
+        .auth-tab {
+            padding: 10px 5px;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--muted);
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .auth-tab.active {
+            background: #ffffff;
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(16, 24, 40, 0.08);
+        }
+
+        .auth-form {
+            display: grid;
+            gap: 9px;
+        }
+
+        .auth-form h2 {
+            margin-bottom: 7px;
+            font-size: 21px;
+        }
+
+        .auth-form label {
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 6px;
+        }
+
+        .auth-form input,
+        .auth-form textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 13px;
+            outline: none;
+        }
+
+        .auth-form input:focus,
+        .auth-form textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px #dbeafe;
+        }
+
+        .auth-button {
+            color: #ffffff;
+            background: var(--primary);
+            padding: 13px;
+            border-radius: 9px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .auth-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .text-button {
+            color: var(--primary);
+            background: transparent;
+            font-size: 13px;
+            margin-top: 7px;
+        }
+
+        .captcha-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px dashed #98a2b3;
+            background: #f2f4f7;
+            border-radius: 9px;
+            padding: 10px 13px;
+            margin-top: 8px;
+        }
+
+        .captcha-text {
+            color: var(--primary);
+            font-family: monospace;
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 5px;
+        }
+
+        .captcha-refresh {
+            color: var(--muted);
+            background: transparent;
+            font-size: 20px;
+        }
+
+        .consent {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 12px !important;
+            font-weight: normal !important;
+            line-height: 1.4;
+        }
+
+        .consent input {
+            width: auto !important;
+            margin-top: 3px;
+        }
+
+        .demo-note,
+        .security-note {
+            text-align: center;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+            margin-top: 13px;
+        }
+
+        .security-note {
+            color: #b54708;
+        }
+
+        /* MAIN APP */
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--dark);
+            color: #ffffff;
+            padding: 24px 16px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #3185ff, #13b6a4);
+            font-size: 22px;
+        }
+
+        .brand h1 {
+            font-size: 20px;
+        }
+
+        .brand small {
+            color: #b8c6e3;
+            font-size: 11px;
+        }
+
+        .nav {
+            display: grid;
+            gap: 7px;
+        }
+
+        .nav button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            background: transparent;
+            color: #d8e2f5;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .nav button:hover,
+        .nav button.active {
+            color: #ffffff;
+            background: #1d386d;
+        }
+
+        .sidebar-note {
+            position: absolute;
+            bottom: 22px;
+            left: 20px;
+            right: 20px;
+            color: #aebddd;
+            font-size: 11px;
+        }
+
+        .main {
+            width: calc(100% - 260px);
+            margin-left: 260px;
+        }
+
+        .topbar {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 0 30px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .menu-button {
+            display: none;
+            background: transparent;
+            font-size: 24px;
+            margin-right: auto;
+        }
+
+        .language,
+        .profile-button {
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #ffffff;
+        }
+
+        .content {
+            max-width: 1450px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 32px;
+            color: #ffffff;
+            border-radius: 22px;
+            background: linear-gradient(120deg, #155eef, #1d4ed8, #0ea5a0);
+        }
+
+        .hero h2 {
+            font-size: 36px;
+            margin-bottom: 7px;
+        }
+
+        .hero p {
+            color: #dbeafe;
+        }
+
+        .search-box {
+            min-width: 340px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 16px 18px 16px 44px;
+            border: 0;
+            border-radius: 12px;
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 11px;
+            left: 15px;
+            color: var(--muted);
+            font-size: 22px;
+        }
+
+        .notice {
+            padding: 15px;
+            margin: 20px 0;
+            color: #164c72;
+            background: #eff8ff;
+            border: 1px solid #b9e1ff;
+            border-radius: 12px;
+            font-size: 13px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 26px 0 15px;
+        }
+
+        .section-heading h2,
+        .section-heading h3 {
+            margin-bottom: 4px;
+        }
+
+        .section-heading p,
+        .page-header p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
+        }
+
+        .service-card {
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            transition: 0.2s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            background: #eff6ff;
+            font-size: 25px;
+        }
+
+        .service-card h3 {
+            font-size: 17px;
+            margin-bottom: 7px;
+        }
+
+        .service-card p {
+            flex: 1;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 11px 15px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            color: #ffffff;
+            background: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            color: var(--primary-dark);
+            background: #eef4ff;
+        }
+
+        .btn-green {
+            color: #087443;
+            background: #e8f8f0;
+        }
+
+        .btn-outline {
+            color: var(--text);
+            background: #ffffff;
+            border: 1px solid var(--border);
+        }
+
+        .btn-danger {
+            color: var(--red);
+            background: #fff0ef;
+        }
+
+        .full {
+            width: 100%;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h2 {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        .service-detail {
+            display: grid;
+            grid-template-columns: 1.4fr 0.8fr;
+            gap: 22px;
+        }
+
+        .panel {
+            padding: 24px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+        }
+
+        .panel h3 {
+            margin-bottom: 15px;
+        }
+
+        .steps {
+            display: grid;
+            gap: 13px;
+            margin-top: 15px;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 13px;
+            background: #f8fafc;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .step-number {
+            width: 27px;
+            height: 27px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            border-radius: 50%;
+            color: #ffffff;
+            background: var(--primary);
+            font-weight: bold;
+        }
+
+        .documents {
+            display: grid;
+            gap: 10px;
+        }
+
+        .document-item {
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 9px;
+            font-size: 13px;
+        }
+
+        .official-box {
+            padding: 15px;
+            margin: 18px 0;
+            color: #087443;
+            background: #effbf4;
+            border: 1px solid #b7e4cc;
+            border-radius: 11px;
+            font-size: 13px;
+        }
+
+        /* SUPPORT AND PROFILE */
+
+        .form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 7px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form label {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .form input,
+        .form select,
+        .form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            outline: none;
+        }
+
+        .form input:focus,
+        .form select:focus,
+        .form textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px #dbeafe;
+        }
+
+        .footer {
+            margin-top: 35px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        /* ADMIN */
+
+        .admin-dashboard {
+            min-height: 100vh;
+            padding: 30px;
+            background: var(--background);
+        }
+
+        .admin-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .admin-header h1 {
+            margin-bottom: 4px;
+        }
+
+        .admin-header p {
+            color: var(--muted);
+        }
+
+        .admin-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .admin-stat {
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .admin-stat span {
+            font-size: 25px;
+        }
+
+        .admin-stat h3 {
+            margin: 9px 0 3px;
+            font-size: 24px;
+        }
+
+        .admin-stat p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 0.8fr;
+            gap: 20px;
+        }
+
+        .admin-panel {
+            padding: 22px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+        }
+
+        .admin-panel h2 {
+            margin-bottom: 17px;
+            font-size: 19px;
+        }
+
+        .admin-panel-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .admin-panel form {
+            display: grid;
+            gap: 9px;
+        }
+
+        .admin-panel label {
+            margin-top: 7px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .admin-panel input,
+        .admin-panel textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #eaecf0;
+            text-align: left;
+        }
+
+        .user-table th {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .user-table .user-actions { white-space: nowrap; }
+        .remove-user-btn { padding: 7px 10px; border-radius: 8px; color: var(--red); background: #fff0ef; border: 1px solid #fecdca; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .remove-user-btn:hover { background: #fee4e2; }
+
+        /* ADMIN SUPPORT REQUESTS */
+        .support-request-list{display:grid;gap:12px;max-height:520px;overflow-y:auto}
+        .support-request-card{padding:15px;border:1px solid var(--border);border-radius:12px;background:#f8fafc}
+        .support-request-card.unread{border-left:4px solid var(--primary);background:#eff6ff}
+        .support-request-meta{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+        .support-request-meta strong{font-size:14px}.support-request-meta small{color:var(--muted);font-size:11px}
+        .support-request-preview{color:#475467;font-size:13px;margin-bottom:10px;white-space:pre-wrap;word-break:break-word}
+        .support-request-actions{display:flex;gap:8px;flex-wrap:wrap}
+        .support-read-btn{padding:8px 11px;border-radius:8px;color:#fff;background:var(--primary);font-size:12px;font-weight:bold;cursor:pointer}
+        .support-read-btn:hover{background:var(--primary-dark)}
+        .support-empty{padding:18px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:10px;background:#f8fafc}
+        .support-modal{display:none;position:fixed;inset:0;z-index:100;align-items:center;justify-content:center;padding:20px;background:rgba(15,31,61,.58)}
+        .support-modal.show{display:flex}.support-modal-card{width:min(100%,620px);max-height:85vh;overflow-y:auto;padding:24px;background:#fff;border-radius:17px;box-shadow:0 25px 70px rgba(0,0,0,.25)}
+        .support-modal-header{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:18px}
+        .support-close-btn{width:34px;height:34px;border-radius:8px;background:#f2f4f7;color:#344054;font-size:20px;cursor:pointer}
+        .support-detail{display:grid;gap:12px}.support-detail-row{padding:12px;border-radius:10px;background:#f8fafc;border:1px solid var(--border)}
+        .support-detail-row label{display:block;margin-bottom:4px;color:var(--muted);font-size:11px;font-weight:bold;text-transform:uppercase}
+        .support-detail-message{white-space:pre-wrap;word-break:break-word;line-height:1.6}
+
+        /* TOAST */
+
+        .toast {
+            display: none;
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 50;
+            padding: 14px 17px;
+            color: #ffffff;
+            background: #101828;
+            border-radius: 10px;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @media (max-width: 950px) {
+
+            .service-detail,
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-stat-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 720px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: 0.25s;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .topbar {
+                justify-content: flex-start;
+                padding: 0 15px;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .profile-button {
+                display: none;
+            }
+
+            .content {
+                padding: 20px 15px 50px;
+            }
+
+            .hero {
+                display: block;
+                padding: 24px;
+            }
+
+            .hero h2 {
+                font-size: 28px;
+            }
+
+            .search-box {
+                min-width: 0;
+                margin-top: 20px;
+            }
+
+            .form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .admin-dashboard {
+                padding: 20px 15px;
+            }
+
+            .admin-stat-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .admin-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .user-table {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .admin-stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-card {
+                padding: 22px;
+            }
+        }
+    
+        .service-back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #d0d5dd;
+            background: #ffffff;
+            color: #344054;
+            border-radius: 10px;
+            padding: 9px 14px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
+        }
+
+        .service-back-button:hover {
+            background: #f8fafc;
+        }
+
+        .bank-service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .bank-service-card {
+            border: 1px solid #e4e7ec;
+            border-radius: 12px;
+            padding: 16px;
+            background: #fff;
+        }
+
+        .bank-service-card h4 {
+            margin: 0 0 8px;
+        }
+
+        .bank-service-card p {
+            margin: 0;
+            color: #667085;
+            line-height: 1.5;
+        }
+
+        .common-docs-list {
+            margin: 10px 0 0;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        .common-docs-note {
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #e4e7ec;
+            color: #475467;
+        }
+
+</style></head><body><div id="authPage" class="auth-page">
+        <div class="auth-card">
+            <div class="auth-logo">✦</div>
+
+            <h1>Zoya Services</h1>
+            <p class="auth-subtitle">
+                All essential citizen services in one place
+            </p>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="loginTab">Login</button>
+                <button class="auth-tab" id="registerTab">Register</button>
+                <button class="auth-tab" id="adminTab">Admin</button>
+            </div>
+
+            <!-- LOGIN FORM -->
+
+            <form id="loginForm" class="auth-form">
+                <h2>User Login</h2>
+
+                <label for="loginMobile">Mobile number</label>
+                <input id="loginMobile" type="tel" maxlength="10" placeholder="Enter 10-digit mobile number" required />
+
+                <label for="loginPassword">Password</label>
+                <input id="loginPassword" type="password" placeholder="Enter password" required />
+
+                <div class="captcha-box">
+                    <span class="captcha-text" id="loginCaptchaText"></span>
+                    <button type="button" class="captcha-refresh" id="refreshLoginCaptcha">
+                        ↻
+                    </button>
+                </div>
+
+                <input id="loginCaptchaInput" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Enter CAPTCHA" required />
+
+                <button class="auth-button" type="submit">
+                    Login
+                </button>
+
+                <button type="button" class="text-button" id="forgotPassword">
+                    Forgot password?
+                </button>
+            </form>
+
+            <!-- REGISTER FORM -->
+
+            <form id="registerForm" class="auth-form hidden">
+                <h2>Create account</h2>
+
+                <label for="registerName">Full name</label>
+                <input id="registerName" type="text" placeholder="Enter full name" required />
+
+                <label for="registerMobile">Mobile number</label>
+                <input id="registerMobile" type="tel" maxlength="10" placeholder="Enter 10-digit mobile number" required />
+
+                <label for="registerEmail">Email</label>
+                <input id="registerEmail" type="email" placeholder="Enter email address" required />
+
+                <label for="registerPassword">Create password</label>
+                <input id="registerPassword" type="password" minlength="8" placeholder="Minimum 8 characters" required />
+
+                <label for="confirmPassword">Confirm password</label>
+                <input id="confirmPassword" type="password" minlength="8" placeholder="Confirm password" required />
+
+                <div class="captcha-box">
+                    <span class="captcha-text" id="registerCaptchaText"></span>
+                    <button type="button" class="captcha-refresh" id="refreshRegisterCaptcha">
+                        ↻
+                    </button>
+                </div>
+
+                <input id="registerCaptchaInput" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Enter CAPTCHA" required />
+
+                <label class="consent">
+                    <input id="privacyConsent" type="checkbox" required />
+                    <span>
+                        I agree to the privacy notice and understand that Zoya Services is an
+                        independent service platform.
+                    </span>
+                </label>
+
+                <button class="auth-button" type="submit">
+                    Register
+                </button>
+            </form>
+
+            <!-- ADMIN FORM -->
+
+            <form id="adminForm" class="auth-form hidden">
+                <h2>Admin Login</h2>
+
+                <label for="adminUserId">Admin user ID</label>
+                <input id="adminUserId" type="text" placeholder="Enter admin user ID" required />
+
+                <label for="adminPassword">Admin password</label>
+                <input id="adminPassword" type="password" placeholder="Enter admin password" required />
+
+                <div class="captcha-box">
+                    <span class="captcha-text" id="adminCaptchaText"></span>
+                    <button type="button" class="captcha-refresh" id="refreshAdminCaptcha">
+                        ↻
+                    </button>
+                </div>
+
+                <input id="adminCaptchaInput" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Enter CAPTCHA" required />
+
+                <button class="auth-button" type="submit">
+                    Admin Login
+                </button>
+
+                <p class="security-note">
+                    Admin authentication must use a secure backend and MFA in production.
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- USER APPLICATION -->
+
+    
+<script>
+const usersKey="zoyaUsers";
+let users=readUsers();
+function readUsers(){try{const v=JSON.parse(localStorage.getItem(usersKey)||"[]");return Array.isArray(v)?v:[]}catch(e){return[]}}
+function saveUsers(){localStorage.setItem(usersKey,JSON.stringify(users));}
+function generateCaptcha(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let x="";for(let i=0;i<6;i++)x+=chars[Math.floor(Math.random()*chars.length)];return x}
+function refreshCaptcha(type){const d=document.getElementById(type+"CaptchaText"),i=document.getElementById(type+"CaptchaInput");if(!d)return;const v=generateCaptcha();d.textContent=v;d.dataset.answer=v;if(i)i.value=""}
+function captchaOK(type){const d=document.getElementById(type+"CaptchaText"),i=document.getElementById(type+"CaptchaInput");return !!(d&&i&&d.dataset.answer&&i.value.trim().toUpperCase()===d.dataset.answer)}
+function switchTab(tab){document.querySelectorAll(".auth-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".auth-form").forEach(x=>x.classList.add("hidden"));document.getElementById(tab+"Tab").classList.add("active");document.getElementById(tab+"Form").classList.remove("hidden");refreshCaptcha(tab)}
+["login","register","admin"].forEach(t=>{document.getElementById(t+"Tab").addEventListener("click",()=>switchTab(t));document.getElementById(t+"CaptchaInput").addEventListener("input",e=>e.target.value=e.target.value.replace(/\s+/g,"").toUpperCase().slice(0,6));document.getElementById("refresh"+t.charAt(0).toUpperCase()+t.slice(1)+"Captcha").addEventListener("click",()=>refreshCaptcha(t));});
+document.getElementById("loginForm").addEventListener("submit",e=>{e.preventDefault();const mobile=loginMobile.value.trim(),password=loginPassword.value;if(!/^[0-9]{10}$/.test(mobile))return alert("Please enter a valid 10-digit mobile number.");if(!captchaOK("login"))return alert("Incorrect CAPTCHA."),refreshCaptcha("login");let user=users.find(u=>u.mobile===mobile&&u.password===password&&u.verified===true);if(!user)return alert("Invalid mobile number or password.");localStorage.removeItem("zoyaAdminSession");localStorage.setItem("zoyaSession",JSON.stringify(user));location.href="index.html";});
+document.getElementById("registerForm").addEventListener("submit",e=>{e.preventDefault();const name=registerName.value.trim(),mobile=registerMobile.value.trim(),email=registerEmail.value.trim(),password=registerPassword.value,confirm=confirmPassword.value;if(!name)return alert("Please enter your full name.");if(!/^[0-9]{10}$/.test(mobile))return alert("Please enter a valid 10-digit mobile number.");if(password.length<8)return alert("Password must contain at least 8 characters.");if(password!==confirm)return alert("Passwords do not match.");if(!captchaOK("register"))return alert("Incorrect CAPTCHA."),refreshCaptcha("register");if(users.some(u=>u.mobile===mobile||u.email===email))return alert("This mobile number or email is already registered.");const user={name,mobile,email,password,verified:true,createdAt:new Date().toISOString()};users.push(user);saveUsers();alert("Registration completed successfully. Please login.");loginMobile.value=mobile;switchTab("login");});
+document.getElementById("adminForm").addEventListener("submit",e=>{e.preventDefault();if(!captchaOK("admin"))return alert("Incorrect CAPTCHA."),refreshCaptcha("admin");if(adminUserId.value.trim()!=="admin"||adminPassword.value!=="Admin@123")return alert("Invalid admin user ID or password.");localStorage.removeItem("zoyaSession");localStorage.setItem("zoyaAdminSession","1");location.href="index.html";});
+document.getElementById("forgotPassword").addEventListener("click",()=>{const m=prompt("Enter your registered mobile number:");if(m)alert("Password reset request created for "+m+". A real application must send OTP through a secure backend SMS provider.")});
+refreshCaptcha("login");refreshCaptcha("register");refreshCaptcha("admin");
+</script>
+</body></html>
