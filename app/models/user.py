@@ -66,3 +66,13 @@ class User(Base):
         server_default=func.now(),
         onupdate=func.now()
     )
+    payment_txnid = Column(
+    String(100),
+    nullable=True
+)
+
+payment_status = Column(
+    String(30),
+    default="pending",
+    nullable=False
+)
