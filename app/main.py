@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.database import Base, engine
-from app.api.routes import auth, services, applications, users
+from app.api.routes import auth, services, applications, users, payment
 
 
 app = FastAPI(
@@ -24,6 +24,7 @@ app.include_router(auth.router, prefix="/api")
 app.include_router(services.router, prefix="/api")
 app.include_router(applications.router, prefix="/api")
 app.include_router(users.router, prefix="/api")
+app.include_router(payment.router, prefix="/api")
 
 
 Base.metadata.create_all(bind=engine)
