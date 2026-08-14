@@ -1,72 +1,68 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+import uuid
 
-from app.core.database import get_db
-from app.core.security import create_access_token, hash_password, verify_password
-from app.models.user import User
-from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse
+from sqlalchemy import Boolean, Column, DateTime, String
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.sql import func
 
-router = APIRouter(prefix="/auth", tags=["Authentication"])
+from app.core.database import Base
 
 
-@router.post("/register")
-def register(data: RegisterRequest, db: Session = Depends(get_db)):
+class User(Base):
+    __tablename__ = "users"
 
-    existing = db.query(User).filter(User.email == data.email).first()
-
-    if existing:
-        raise HTTPException(
-            status_code=400,
-            detail="Email already registered"
-        )
-
-    user = User(
-        email=data.email,
-        phone=data.phone,
-        password_hash=hash_password(data.password),
-        is_active=False
+    id = Column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4
     )
 
-    db.add(user)
-    db.commit()
-    db.refresh(user)
+    email = Column(
+        String(255),
+        unique=True,
+        nullable=True
+    )
 
-    return {
-        "status": "payment_required",
-        "message": "Registration created. Please complete ₹10 payment.",
-        "user_id": str(user.id),
-        "email": user.email,
-        "phone": user.phone
-    }
+    phone = Column(
+        String(20),
+        unique=True,
+        nullable=True
+    )
 
+    password_hash = Column(
+        String,
+        nullable=True
+    )
 
-@router.post("/login", response_model=TokenResponse)
-def login(data: LoginRequest, db: Session = Depends(get_db)):
+    role = Column(
+        String(30),
+        default="user",
+        nullable=False
+    )
 
-    user = db.query(User).filter(User.email == data.email).first()
+    # New users must complete ₹10 payment before login
+    is_active = Column(
+        Boolean,
+        default=False,
+        nullable=False
+    )
 
-    if not user:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid email or password"
-        )
+    is_verified = Column(
+        Boolean,
+        default=False
+    )
 
-    if not user.password_hash or not verify_password(
-        data.password,
-        user.password_hash
-    ):
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid email or password"
-        )
+    preferred_language = Column(
+        String(10),
+        default="en"
+    )
 
-    if not user.is_active:
-        raise HTTPException(
-            status_code=403,
-            detail="Please complete the ₹10 registration payment before login."
-        )
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now()
+    )
 
-    return {
-        "access_token": create_access_token(str(user.id)),
-        "token_type": "bearer"
-    }
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now()
+    )
