@@ -1,18 +1,72 @@
-import uuid
-from sqlalchemy import Boolean, Column, DateTime, String
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.sql import func
-from app.core.database import Base
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
-class User(Base):
-    __tablename__ = "users"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    email = Column(String(255), unique=True, nullable=True)
-    phone = Column(String(20), unique=True, nullable=True)
-    password_hash = Column(String, nullable=True)
-    role = Column(String(30), default="user", nullable=False)
-    is_active = Column(Boolean, default=True)
-    is_verified = Column(Boolean, default=False)
-    preferred_language = Column(String(10), default="en")
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+from app.core.database import get_db
+from app.core.security import create_access_token, hash_password, verify_password
+from app.models.user import User
+from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse
+
+router = APIRouter(prefix="/auth", tags=["Authentication"])
+
+
+@router.post("/register")
+def register(data: RegisterRequest, db: Session = Depends(get_db)):
+
+    existing = db.query(User).filter(User.email == data.email).first()
+
+    if existing:
+        raise HTTPException(
+            status_code=400,
+            detail="Email already registered"
+        )
+
+    user = User(
+        email=data.email,
+        phone=data.phone,
+        password_hash=hash_password(data.password),
+        is_active=False
+    )
+
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "status": "payment_required",
+        "message": "Registration created. Please complete ₹10 payment.",
+        "user_id": str(user.id),
+        "email": user.email,
+        "phone": user.phone
+    }
+
+
+@router.post("/login", response_model=TokenResponse)
+def login(data: LoginRequest, db: Session = Depends(get_db)):
+
+    user = db.query(User).filter(User.email == data.email).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password"
+        )
+
+    if not user.password_hash or not verify_password(
+        data.password,
+        user.password_hash
+    ):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password"
+        )
+
+    if not user.is_active:
+        raise HTTPException(
+            status_code=403,
+            detail="Please complete the ₹10 registration payment before login."
+        )
+
+    return {
+        "access_token": create_access_token(str(user.id)),
+        "token_type": "bearer"
+    }
